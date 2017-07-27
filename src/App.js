@@ -165,10 +165,10 @@ class App extends Component {
                     <div><select><option>Fluxo</option></select></div>
                   </div>
                 </div>
+                <div>
+                  {selectedCategories && this.renderSelectedCategories()}
+                </div>
               </form>
-            </div>
-            <div>
-              {selectedCategories && this.renderSelectedCategories()}
             </div>
         </div>
       </div>
