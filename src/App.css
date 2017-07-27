@@ -63,3 +63,20 @@
   float: left;
   padding: 10px;
 }
+
+.subcategorie {
+  padding: 10px 0 10px 30px;
+}
+
+.selected {
+  padding: 10px;
+  background: blue;
+  color: white;
+  clear:both;
+  border-radius: 10px;
+  width: 400px;
+}
+
+.selected > .sel {
+  padding: 10px;
+}

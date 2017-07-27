@@ -3,7 +3,27 @@ import './App.css';
 import map from 'lodash/map'
 import findIndex from 'lodash/findIndex'
 
-const subCategories = ['Setor1', 'Setor2', 'Setor3', 'Setor4'];
+const subCategories = [
+  {
+    id: 3,
+    name: 'Setor1',
+    subCategories: [],
+    field: false
+  },
+  {
+    id: 4,
+    name: 'Setor2',
+    subCategories: [],
+    field: false
+  },
+  {
+    id: 5,
+    name: 'Setor3',
+    subCategories: [],
+    field: false
+  }
+];
+
 
 class App extends Component {
 
@@ -31,12 +51,14 @@ class App extends Component {
         }
       ],
       subCategory: false,
+      selectedCategories: false
     }
 
     this.createCategories = this.createCategories.bind(this)
+    this.createSubcategorie = this.createSubcategorie.bind(this)
   }
 
-  renderFieldSubCategory(show) {
+  renderFieldInput(show) {
     const toggle = show ? 'show' : 'hide'
     return (
       <div className={toggle}>
@@ -45,16 +67,19 @@ class App extends Component {
     )
   }
 
-  createSubcategorie() {
+  createSubcategorie(index, key) {
+
     return (
-      <div>
+      <div key={key} className="subcategorie line">
         <i className="fa fa-minus-square-o" aria-hidden="true"></i>
-        <input type="checkbox" type="checkbox" checked="checked"/>
+        <input type="checkbox" type="checkbox" checked="checked" />
+        {index.name}
+        <a>Add subcategoria</a>
       </div>
     )
   }
 
-  appendFieldSubCategory(id) {
+  appendInputName(id) {
 
     const index = findIndex(this.state.categories, { id: parseInt(id, 10) })
 
@@ -63,21 +88,54 @@ class App extends Component {
     this.setState({ ...this.state, newState})
   }
 
+  appendFieldSubCategory(id) {
+
+    const index = findIndex(this.state.categories, { id: parseInt(id, 10) })
+
+    const newState =  Object.assign(...this.state, this.state.categories[index], {subCategories: subCategories})
+
+    this.setState({ ...this.state, newState})
+    this.setState({
+      selectedCategories: true
+    })
+
+  }
+
+  renderFieldsSubcategory(subCategories) {
+    return map(subCategories, this.createSubcategorie)
+  }
+
   createCategories(index, key) {
     const { subCategory } = this.state;
     const { id, name, subCategories, field } = index
 
     return (
       <div className="line" key={id}>
-        <i className="fa fa-plus-square" aria-hidden="true" />
+        <i className="fa fa-plus-square" aria-hidden="true" onClick={() => this.appendFieldSubCategory(id)}/>
         <input type="checkbox" /> {name}
-        <a onClick={() => this.appendFieldSubCategory(id)}>Adicionar uma subcategoria</a>
-        {field && this.renderFieldSubCategory(true)}
+        <a onClick={() => this.appendInputName(id)}>Add subcategoria</a>
+        {field && this.renderFieldInput(true)}
+        {subCategories && this.renderFieldsSubcategory(subCategories)}
       </div>
     )
   }
+
+  renderSelectedCategories() {
+
+    return (
+      <div className="selected">
+        <span className="sel">Financeiro</span>
+        <i className="fa fa-long-arrow-right" aria-hidden="true"></i>
+        <span className="sel"> Setor1 </span>
+        <i className="fa fa-long-arrow-right" aria-hidden="true"></i>
+        <span className="sel"> Setor3 </span>
+        <i className="fa fa-times-circle-o" aria-hidden="true"></i>
+      </div>
+    )
+  }
+
   render() {
-    const { categories } = this.state
+    const { categories, selectedCategories } = this.state
     return (
       <div className="App">
         <div className="container">
@@ -109,7 +167,9 @@ class App extends Component {
                 </div>
               </form>
             </div>
-
+            <div>
+              {selectedCategories && this.renderSelectedCategories()}
+            </div>
         </div>
       </div>
     );
